@@ -64,24 +64,29 @@
 ## 脚本执行 ##
 
 1. 创建虚拟机镜像
+		
 		PS C:\Scripts> .\SnapshotVirtualMachine.ps1 -subscriptionName Internal-002 -cloudServiceName zymub -virtualMachineName zymub -shutdownMachine -snapshotOsDisk  -snapshotDataDisks
-![](http://i.imgur.com/1IsxOO9.png)
+
+	![](http://i.imgur.com/1IsxOO9.png)
 2. 列出虚拟机已有的镜像
 	   
 		PS C:\Scripts> .\GetSnapshotList.ps1 -subscriptionName Internal-002 -cloudServiceName zymub -virtualMachineName zymub -maximumDays 15
-![](http://i.imgur.com/6o3BQx1.png)
+
+	![](http://i.imgur.com/6o3BQx1.png)
 3. 清除虚拟机镜像
 	   
 		PS C:\Scripts> .\DeleteOldSnapshots.ps1 -subscriptionName Internal-002 -cloudServiceName zymub -virtualMachineName zymub -maximumDays 1
-![](http://i.imgur.com/U7PtugE.png)
+
+	![](http://i.imgur.com/U7PtugE.png)
 4. 还原虚拟机
 	   
 		PS C:\Scripts> .\RestoreVirtualMachine.ps1 -subscriptionName Internal-002 -cloudServiceName zymub -virtualMachineName zymub -utcRestoreDate "2015-DEC-26 10:05:43"
-![](http://i.imgur.com/BJPtCSC.png)
+	
+	![](http://i.imgur.com/BJPtCSC.png)
 
 
 ----------
-EOF
+EOF2
 
 
 
