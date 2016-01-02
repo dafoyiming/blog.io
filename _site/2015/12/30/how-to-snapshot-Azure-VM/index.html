@@ -128,84 +128,114 @@
 
 <hr />
 
+<h2 id="section">准备工作</h2>
+
+<ol>
+  <li>了解文件结构
+<img src="http://i.imgur.com/i2hJeiW.png" alt="" /></li>
+  <li>导入PublishSetting File
+     Get-AzurePublishSettingsFile
+     Import-AzurePublishSettingsFile</li>
+  <li>填写csv文件获取指纹信息
+<img src="http://i.imgur.com/UzUm7Sz.png" alt="" />
+<img src="http://i.imgur.com/sRgEkey.png" alt="" />
+## 主要问题 ##</li>
+</ol>
+
 <ul>
-  <li>
-    <p>准备工作</p>
-
-    <ol>
-      <li>了解文件结构
- <img src="http://i.imgur.com/i2hJeiW.png" alt="" /></li>
-      <li>导入PublishSetting File
- <code>Get-AzurePublishSettingsFile</code>
- <code>Import-AzurePublishSettingsFile</code></li>
-      <li>填写csv文件获取指纹信息
- <img src="http://i.imgur.com/UzUm7Sz.png" alt="" />
- <img src="http://i.imgur.com/sRgEkey.png" alt="" /></li>
-    </ol>
-  </li>
-  <li>主要问题
-    <ul>
-      <li>脚本编写与2013年，因此对Powershell的版本有一定的要求，需要使用较早版本的Powershell（推荐使用Powershell 0.8.12）</li>
-      <li>脚本针对Global Azure 设计，有些代码需要针对China Azure进行修改</li>
-    </ul>
-  </li>
-  <li>
-    <p>修改点</p>
-
-    <ol>
-      <li>
-        <p>修改Azure Import-Module 为 
-<code>Import-Module 'C:\Program Files (x86)\Microsoft SDKs\Azure\PowerShell\ServiceManagement\Azure\Azure.psd1'</code></p>
-
-        <ul>
-          <li>SnapshotVirtualMachine.ps1    51行</li>
-          <li>RestoreVirtualMachine.ps1     48行</li>
-          <li>GetSnapshotList.ps1           43行</li>
-          <li>DeleteOldSnapshots.ps1        37行</li>
-          <li>Commom/RepositoryCommon.ps1   13行</li>
-        </ul>
-      </li>
-      <li>
-        <p>修改Common/RepositoryCommon</p>
-      </li>
-    </ol>
-
-    <pre><code>  1. 116行
-  添加-Environment AzureChinaCloud
-   		`Set-AzureSubscription -Environment AzureChinaCloud -Certificate $managementCertificate -SubscriptionId $subscriptionId -CurrentStorageAccount $storageAccount -SubscriptionName $subscriptionName -SubscriptionDataFile $subscriptionDataFile`
-  2. 120行
-  添加-Environment AzureChinaCloud
-   		`Set-AzureSubscription -Environment AzureChinaCloud -Certificate $managementCertificate -SubscriptionId $subscriptionId -CurrentStorageAccount $storageAccount -SubscriptionName $subscriptionName -SubscriptionDataFile $subscriptionDataFile`
-  2. 258行
-  添加EndpointSuffix=core.chinacloudapi.cn;
-           `$connectionString = "DefaultEndpointsProtocol=$($protocol);AccountName=$($storageAccountName);AccountKey=$($primaryKey);EndpointSuffix=core.chinacloudapi.cn;"`
-  2. 291行
-  原代码 .core\.windows\.net
-         	`$matchList = [System.Text.RegularExpressions.Regex]::Match($blobUri, "^(?&lt;Protocol&gt;http[s]?)://(?&lt;StorageAccountName&gt;[^/]*)\.blob\.core\.windows\.net/(?&lt;ContainerName&gt;[^/]*)/(?&lt;BlobName&gt;.*)$", $regexOptionFlags)`
-  新代码 .core\.chinacloudapi\.cn
-        	 `$matchList = [System.Text.RegularExpressions.Regex]::Match($blobUri, "^(?&lt;Protocol&gt;http[s]?)://(?&lt;StorageAccountName&gt;[^/]*)\.blob\.core\.chinacloudapi\.cn/(?&lt;ContainerName&gt;[^/]*)/(?&lt;BlobName&gt;.*)$", $regexOptionFlags)`
-</code></pre>
-  </li>
-  <li>脚本执行
-    <ol>
-      <li>创建虚拟机镜像
-<code>PS C:\Scripts&gt; .\SnapshotVirtualMachine.ps1 -subscriptionName Internal-002 -cloudServiceName zymub -virtualMachineName zymub -shutdownMachine -snapshotOsDisk  -snapshotDataDisks</code>
-  <img src="http://i.imgur.com/1IsxOO9.png" alt="" /></li>
-      <li>列出虚拟机已有的镜像
-<code>PS C:\Scripts&gt; .\GetSnapshotList.ps1 -subscriptionName Internal-002 -cloudServiceName zymub -virtualMachineName zymub -maximumDays 15</code>
-  <img src="http://i.imgur.com/6o3BQx1.png" alt="" /></li>
-      <li>清除虚拟机镜像
-<code>PS C:\Scripts&gt; .\DeleteOldSnapshots.ps1 -subscriptionName Internal-002 -cloudServiceName zymub -virtualMachineName zymub -maximumDays 1</code>
-  <img src="http://i.imgur.com/U7PtugE.png" alt="" /></li>
-      <li>还原虚拟机
-<code>PS C:\Scripts&gt; .\RestoreVirtualMachine.ps1 -subscriptionName Internal-002 -cloudServiceName zymub -virtualMachineName zymub -utcRestoreDate "2015-DEC-26 10:05:43"</code>
-  <img src="http://i.imgur.com/BJPtCSC.png" alt="" /></li>
-    </ol>
-  </li>
+  <li>脚本编写于2013年，因此对Powershell的版本有一定的要求，需要使用较早版本的Powershell（推荐使用Powershell 0.8.12）</li>
+  <li>脚本针对Global Azure 设计，有些代码需要针对China Azure进行修改</li>
 </ul>
 
+<h2 id="section-1">修改点</h2>
+
+<ol>
+  <li>
+    <p>修改Azure Import-Module 为</p>
+
+    <p>Import-Module ‘C:\Program Files (x86)\Microsoft SDKs\Azure\PowerShell\ServiceManagement\Azure\Azure.psd1’</p>
+
+    <pre><code>     - SnapshotVirtualMachine.ps1    51行
+     - RestoreVirtualMachine.ps1     48行
+     - GetSnapshotList.ps1           43行
+     - DeleteOldSnapshots.ps1        37行
+     - Commom/RepositoryCommon.ps1   13行
+</code></pre>
+  </li>
+  <li>
+    <p>修改Common/RepositoryCommon</p>
+  </li>
+</ol>
+
+<ul>
+  <li>116行</li>
+</ul>
+
+<p>添加-Environment AzureChinaCloud</p>
+
+<pre><code>Set-AzureSubscription -Environment AzureChinaCloud -Certificate $managementCertificate -SubscriptionId $subscriptionId -CurrentStorageAccount $storageAccount -SubscriptionName $subscriptionName -SubscriptionDataFile $subscriptionDataFile
+</code></pre>
+
+<ul>
+  <li>120行</li>
+</ul>
+
+<p>添加-Environment AzureChinaCloud</p>
+
+<pre><code>Set-AzureSubscription -Environment AzureChinaCloud -Certificate $managementCertificate -SubscriptionId $subscriptionId -CurrentStorageAccount $storageAccount -SubscriptionName $subscriptionName -SubscriptionDataFile $subscriptionDataFile
+</code></pre>
+
+<ul>
+  <li>258行</li>
+</ul>
+
+<p>添加EndpointSuffix=core.chinacloudapi.cn;</p>
+
+<pre><code>$connectionString = "DefaultEndpointsProtocol=$($protocol);AccountName=$($storageAccountName);AccountKey=$($primaryKey);EndpointSuffix=core.chinacloudapi.cn;"
+</code></pre>
+
+<ul>
+  <li>291行</li>
+</ul>
+
+<p>原代码 .core.windows.net</p>
+
+<pre><code>$matchList = [System.Text.RegularExpressions.Regex]::Match($blobUri, "^(?&lt;Protocol&gt;http[s]?)://(?&lt;StorageAccountName&gt;[^/]*)\.blob\.core\.windows\.net/(?&lt;ContainerName&gt;[^/]*)/(?&lt;BlobName&gt;.*)$", $regexOptionFlags)
+</code></pre>
+
+<p>新代码 .core.chinacloudapi.cn</p>
+
+<pre><code>$matchList = [System.Text.RegularExpressions.Regex]::Match($blobUri, "^(?&lt;Protocol&gt;http[s]?)://(?&lt;StorageAccountName&gt;[^/]*)\.blob\.core\.chinacloudapi\.cn/(?&lt;ContainerName&gt;[^/]*)/(?&lt;BlobName&gt;.*)$", $regexOptionFlags)
+</code></pre>
+
+<h2 id="section-2">脚本执行</h2>
+
+<ol>
+  <li>创建虚拟机镜像
+     PS C:\Scripts&gt; .\SnapshotVirtualMachine.ps1 -subscriptionName Internal-002 -cloudServiceName zymub -virtualMachineName zymub -shutdownMachine -snapshotOsDisk  -snapshotDataDisks
+<img src="http://i.imgur.com/1IsxOO9.png" alt="" /></li>
+  <li>
+    <p>列出虚拟机已有的镜像</p>
+
+    <pre><code> PS C:\Scripts&gt; .\GetSnapshotList.ps1 -subscriptionName Internal-002 -cloudServiceName zymub -virtualMachineName zymub -maximumDays 15 ![](http://i.imgur.com/6o3BQx1.png)
+</code></pre>
+  </li>
+  <li>
+    <p>清除虚拟机镜像</p>
+
+    <pre><code> PS C:\Scripts&gt; .\DeleteOldSnapshots.ps1 -subscriptionName Internal-002 -cloudServiceName zymub -virtualMachineName zymub -maximumDays 1 ![](http://i.imgur.com/U7PtugE.png)
+</code></pre>
+  </li>
+  <li>
+    <p>还原虚拟机</p>
+
+    <pre><code> PS C:\Scripts&gt; .\RestoreVirtualMachine.ps1 -subscriptionName Internal-002 -cloudServiceName zymub -virtualMachineName zymub -utcRestoreDate "2015-DEC-26 10:05:43" ![](http://i.imgur.com/BJPtCSC.png)
+</code></pre>
+  </li>
+</ol>
+
 <hr />
-<p>已完</p>
+<p>EOF</p>
 
 
 
@@ -406,7 +436,7 @@ var duoshuoQuery = {short_name:"cnfeat"};
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2015 dafoyiming ❖ Powered by Jekyll.
+                &copy; 2016 dafoyiming ❖ Powered by Jekyll.
                 </p>
             </div>
         </div>
