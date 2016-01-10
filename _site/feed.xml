@@ -5,9 +5,84 @@
     <description>张一鸣|大佛</description>
     <link>http://dafoyiming.cn/</link>
     <atom:link href="http://dafoyiming.cn/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sun, 03 Jan 2016 14:44:40 +0000</pubDate>
-    <lastBuildDate>Sun, 03 Jan 2016 14:44:40 +0000</lastBuildDate>
+    <pubDate>Sun, 10 Jan 2016 09:00:26 +0000</pubDate>
+    <lastBuildDate>Sun, 10 Jan 2016 09:00:26 +0000</lastBuildDate>
     <generator>Jekyll v2.4.0</generator>
+    
+      <item>
+        <title>How To Reserve Pip For Azure Vm By Cli</title>
+        <description>&lt;h1 id=&quot;azure-cli-pip&quot;&gt;如何通过Azure Cli 创建PIP&lt;/h1&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;azure-publishsettingsfile&quot;&gt;下载Azure PublishsettingsFile&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;`C:\Users\zhang.yiming&amp;gt;azure account download -e AzureChinaCloud`
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://i.imgur.com/ai18X7X.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;请记录文件下载后的保存路径，导入时会用到
+## 导入Azure PublishsettingsFile ##&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;`C:\Users\zhang.yiming&amp;gt;azure account import c:/Internal-004-Internal-002-WATSTest03
+ -Internal-003-Internal-005-Internal-001-12-27-2015-credentials.publishsettings`
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;设置默认管理订阅&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;列出目前可用的订阅&lt;/p&gt;
+
+    &lt;p&gt;&lt;code&gt;C:\Users\zhang.yiming&amp;gt;azure account list&lt;/code&gt;
+  &lt;img src=&quot;http://i.imgur.com/0UkkjXJ.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;将需要设置PIP的虚拟机的订阅设置为默认订阅&lt;/p&gt;
+
+    &lt;p&gt;&lt;code&gt;C:\Users\zhang.yiming&amp;gt;azure account set 4c1f7e7c-****-****-****-****b58636&lt;/code&gt;
+	 &lt;img src=&quot;http://i.imgur.com/I8zF17J.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+    &lt;blockquote&gt;
+      &lt;p&gt;安全原因部分信息被隐去，请按照实际情况填写&lt;/p&gt;
+    &lt;/blockquote&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;查看虚拟机是否设置过PIP&lt;/p&gt;
+
+    &lt;p&gt;&lt;code&gt;C:\Users\zhang.yiming&amp;gt;azure vm public-ip list zymub&lt;/code&gt;&lt;/p&gt;
+
+    &lt;p&gt;&lt;img src=&quot;http://i.imgur.com/LxObm1m.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;为虚拟机设置PIP&lt;/p&gt;
+
+    &lt;p&gt;&lt;code&gt;C:\Users\zhang.yiming&amp;gt;azure vm public-ip set zymub zymubpip&lt;/code&gt;&lt;/p&gt;
+
+    &lt;p&gt;&lt;img src=&quot;http://i.imgur.com/mht9iWK.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;可以在检查一下当前的PIP&lt;/p&gt;
+
+    &lt;p&gt;&lt;code&gt;C:\Users\zhang.yiming&amp;gt;azure vm public-ip list zymub&lt;/code&gt;&lt;/p&gt;
+
+    &lt;p&gt;&lt;img src=&quot;http://i.imgur.com/TBxOHCy.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+    &lt;p&gt;&lt;code&gt;C:\Users\zhang.yiming&amp;gt;azure vm show zymub&lt;/code&gt;&lt;/p&gt;
+
+    &lt;p&gt;&lt;img src=&quot;http://i.imgur.com/AP62cEh.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Sun, 10 Jan 2016 00:00:00 +0000</pubDate>
+        <link>http://dafoyiming.cn/2016/01/10/how-to-reserve-PIP-for-Azure-VM-by-Cli/</link>
+        <guid isPermaLink="true">http://dafoyiming.cn/2016/01/10/how-to-reserve-PIP-for-Azure-VM-by-Cli/</guid>
+        
+        
+      </item>
     
       <item>
         <title>How To Config And Check Azure Ilb</title>

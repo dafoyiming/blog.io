@@ -8,9 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="张一鸣|大佛">
 
-    <title>大佛</title>
+    <title>How To Reserve Pip For Azure Vm By Cli - 大佛</title>
 
-    <link rel="canonical" href="http://dafoyiming.cn/">
+    <link rel="canonical" href="http://dafoyiming.cn/2016/01/10/how-to-reserve-PIP-for-Azure-VM-by-Cli/">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -90,125 +90,216 @@
 </nav>
 
 
-    <!-- Page Header -->
-<header class="intro-header" style="background-image: url('/img/facebook.jpg')">
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/facebook.jpg')
+    }
+</style>
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="site-heading">
-                    <h1>大佛</h1>
-                    <hr class="small">
-                    <span class="subheading">张一鸣</span>
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                    </div>
+                    <h1>How To Reserve Pip For Azure Vm By Cli</h1>
+                    
+                    <span class="meta">Posted by dafoyiming on January 10, 2016</span>
                 </div>
             </div>
         </div>
     </div>
 </header>
 
-<link rel="stylesheet" href="/css/backtop.css">  <!-- Back Top -->
-<script type="text/javascript" src="/js/backtop.js"></script>  <!-- Back Top -->
 
-<div id="back-top">
-  <a href="#top" title="回到顶部"></a>
-</div>
 
-<!-- Main Content -->
-<div class="container">
-	<div class="row">
-		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-			
-<div class="post-preview">
-    <a href="/2016/01/10/how-to-reserve-PIP-for-Azure-VM-by-Cli/">
-        <h2 class="post-title">            
-            How To Reserve Pip For Azure Vm By Cli
-        </h2>
-        
-        <div class="post-content-preview">
-            如何通过Azure Cli 创建PIP
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <h1 id="azure-cli-pip">如何通过Azure Cli 创建PIP</h1>
+
+<hr />
+
+<h2 id="azure-publishsettingsfile">下载Azure PublishsettingsFile</h2>
+
+<pre><code>`C:\Users\zhang.yiming&gt;azure account download -e AzureChinaCloud`
+</code></pre>
+
+<p><img src="http://i.imgur.com/ai18X7X.png" alt="" /></p>
+
+<blockquote>
+  <p>请记录文件下载后的保存路径，导入时会用到
+## 导入Azure PublishsettingsFile ##</p>
+</blockquote>
+
+<pre><code>`C:\Users\zhang.yiming&gt;azure account import c:/Internal-004-Internal-002-WATSTest03
+ -Internal-003-Internal-005-Internal-001-12-27-2015-credentials.publishsettings`
+</code></pre>
+
+<h2 id="section">设置默认管理订阅</h2>
+
+<ul>
+  <li>
+    <p>列出目前可用的订阅</p>
+
+    <p><code>C:\Users\zhang.yiming&gt;azure account list</code>
+  <img src="http://i.imgur.com/0UkkjXJ.png" alt="" /></p>
+  </li>
+  <li>
+    <p>将需要设置PIP的虚拟机的订阅设置为默认订阅</p>
+
+    <p><code>C:\Users\zhang.yiming&gt;azure account set 4c1f7e7c-****-****-****-****b58636</code>
+	 <img src="http://i.imgur.com/I8zF17J.png" alt="" /></p>
+
+    <blockquote>
+      <p>安全原因部分信息被隐去，请按照实际情况填写</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>查看虚拟机是否设置过PIP</p>
+
+    <p><code>C:\Users\zhang.yiming&gt;azure vm public-ip list zymub</code></p>
+
+    <p><img src="http://i.imgur.com/LxObm1m.png" alt="" /></p>
+  </li>
+  <li>
+    <p>为虚拟机设置PIP</p>
+
+    <p><code>C:\Users\zhang.yiming&gt;azure vm public-ip set zymub zymubpip</code></p>
+
+    <p><img src="http://i.imgur.com/mht9iWK.png" alt="" /></p>
+  </li>
+  <li>
+    <p>可以在检查一下当前的PIP</p>
+
+    <p><code>C:\Users\zhang.yiming&gt;azure vm public-ip list zymub</code></p>
+
+    <p><img src="http://i.imgur.com/TBxOHCy.png" alt="" /></p>
+
+    <p><code>C:\Users\zhang.yiming&gt;azure vm show zymub</code></p>
+
+    <p><img src="http://i.imgur.com/AP62cEh.png" alt="" /></p>
+  </li>
+</ul>
+
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2016/01/03/how-to-config-and-check-Azure-ILB/" data-toggle="tooltip" data-placement="top" title="How To Config And Check Azure Ilb">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/2016/01/10/how-to-reserve-PIP-for-Azure-VM-by-Cli" data-title="How To Reserve Pip For Azure Vm By Cli"
+                    data-images="http://dafoyiming.cn/img/facebook.jpg"
+                    data-content="如何通过Azure Cli 创建PIP
 
 
 
 下载Azure PublishsettingsFile
 
-`C:\Users\zhang.yiming&gt;azure account download -e AzureChinaCloud`
+`C:\Users\zhang.yiming&gt... | Microdust:Azeril's blog"
+                    data-url="http://dafoyiming.cn/2016/01/10/how-to-reserve-PIP-for-Azure-VM-by-Cli/">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat flat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo flat" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban flat" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
 
 
-
-
-
-  请记录文件下载后的保存路径，导入时会用...
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/2016/01/10/how-to-reserve-PIP-for-Azure-VM-by-Cli" data-title="How To Reserve Pip For Azure Vm By Cli" data-url="http://dafoyiming.cn/2016/01/10/how-to-reserve-PIP-for-Azure-VM-by-Cli/"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
         </div>
-    </a>
-    <p class="post-meta">Posted by dafoyiming on January 10, 2016</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/2016/01/03/how-to-config-and-check-Azure-ILB/">
-        <h2 class="post-title">            
-            How To Config And Check Azure Ilb
-        </h2>
-        
-        <div class="post-content-preview">
-            如何创建Azure ILB并实现多端口负载及验证
+    </div>
+</article>
 
 
 
-系统原理图
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"cnfeat"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
 
-  对Azure官方提供的原理图略作标注
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
 
-
-
-设置ILB
-$svc="zymilb"
-$ilb="zym"
-$subnet="subnet01"
-$IP="10.0.0.10"
-Add-AzureInternalLoadB...
-        </div>
-    </a>
-    <p class="post-meta">Posted by dafoyiming on January 3, 2016</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/2015/12/30/how-to-snapshot-Azure-VM/">
-        <h2 class="post-title">            
-            How To Snapshot Azure Vm
-        </h2>
-        
-        <div class="post-content-preview">
-            Azure 虚拟机镜像管理脚本说明
-
-http://blogs.technet.com/b/canitpro/archive/2014/12/11/step-by-step-create-a-vm-snapshot-in-azure.aspx
-
-
-
-准备工作
-
-
-  了解文件结构
-
-  导入P...
-        </div>
-    </a>
-    <p class="post-meta">Posted by dafoyiming on December 30, 2015</p>
-</div>
-
-<hr>
-
-
-<!-- Pager -->
-
-
-		</div>
-	</div>
-</div>
-
-<hr>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
 
 
     <!-- Footer -->
