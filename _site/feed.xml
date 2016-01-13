@@ -5,8 +5,8 @@
     <description>张一鸣|大佛</description>
     <link>http://dafoyiming.cn/</link>
     <atom:link href="http://dafoyiming.cn/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Wed, 13 Jan 2016 03:00:05 +0000</pubDate>
-    <lastBuildDate>Wed, 13 Jan 2016 03:00:05 +0000</lastBuildDate>
+    <pubDate>Wed, 13 Jan 2016 03:15:20 +0000</pubDate>
+    <lastBuildDate>Wed, 13 Jan 2016 03:15:20 +0000</lastBuildDate>
     <generator>Jekyll v2.4.0</generator>
     
       <item>
@@ -50,14 +50,12 @@
  $adminPassword = &quot;yourpassword&quot;
  $vmName =&quot;yourVM&quot;
  $location = &quot;China East&quot;
- #操作系统2012 datacenter
  $imageName = &quot; 55bc2b193643443bb879a78bda516fc8__Windows-Server-2012-Datacenter-201504.01-zh.cn-127GB.vhd &quot;
  $vmSize =&quot;Standard_DS2&quot;
  $OSDiskPath = &quot;https://&quot; + $storageAccount + &quot;.blob.core.chinacloudapi.cn/vhds/&quot; + $vmName + &quot;_OS_PIO.vhd&quot;
- $vm = New-AzureVMConfig -Name $vmName -ImageName $imageName -InstanceSize $vmSize -MediaLocation $OSDiskPath
- #windows 使用这条命令     
+ $vm = New-AzureVMConfig -Name $vmName -ImageName $imageName -InstanceSize $vmSize -MediaLocation $OSDiskPath   
  Add-AzureProvisioningConfig -Windows -VM $vm -AdminUsername $adminName -Password $adminPassword 
- 	 New-AzureVM -ServiceName $vmName -VMs $VM -Location $location
+ New-AzureVM -ServiceName $vmName -VMs $VM -Location $location
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;blockquote&gt;

@@ -27,14 +27,12 @@
 	 $adminPassword = "yourpassword"
 	 $vmName ="yourVM"
 	 $location = "China East"
-     #操作系统2012 datacenter
      $imageName = " 55bc2b193643443bb879a78bda516fc8__Windows-Server-2012-Datacenter-201504.01-zh.cn-127GB.vhd "
      $vmSize ="Standard_DS2"
 	 $OSDiskPath = "https://" + $storageAccount + ".blob.core.chinacloudapi.cn/vhds/" + $vmName + "_OS_PIO.vhd"
-	 $vm = New-AzureVMConfig -Name $vmName -ImageName $imageName -InstanceSize $vmSize -MediaLocation $OSDiskPath
-	 #windows 使用这条命令     
+	 $vm = New-AzureVMConfig -Name $vmName -ImageName $imageName -InstanceSize $vmSize -MediaLocation $OSDiskPath   
 	 Add-AzureProvisioningConfig -Windows -VM $vm -AdminUsername $adminName -Password $adminPassword 
- 	 New-AzureVM -ServiceName $vmName -VMs $VM -Location $location
+	 New-AzureVM -ServiceName $vmName -VMs $VM -Location $location
 
 > 如何获取当前可用的ImageName（由于Azure会定期更新ImageName，为了保证您能够填写正确的ImageName）可以通过下面的脚本查询一下。比如：
 >
