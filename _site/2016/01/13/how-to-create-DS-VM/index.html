@@ -8,9 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="张一鸣|大佛">
 
-    <title>How To Reserve Pip For Azure Vm By Cli - 大佛</title>
+    <title>How To Create Ds Vm - 大佛</title>
 
-    <link rel="canonical" href="http://dafoyiming.cn/2016/01/10/how-to-reserve-PIP-for-Azure-VM-by-Cli/">
+    <link rel="canonical" href="http://dafoyiming.cn/2016/01/13/how-to-create-DS-VM/">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -104,9 +104,9 @@
                     <div class="Tags">
                         
                     </div>
-                    <h1>How To Reserve Pip For Azure Vm By Cli</h1>
+                    <h1>How To Create Ds Vm</h1>
                     
-                    <span class="meta">Posted by dafoyiming on January 10, 2016</span>
+                    <span class="meta">Posted by dafoyiming on January 13, 2016</span>
                 </div>
             </div>
         </div>
@@ -122,71 +122,101 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
-                <h1 id="azure-cli-pip">如何通过Azure Cli 创建PIP</h1>
+                <h1 id="ds">如何创建DS系列虚拟机</h1>
+
+<blockquote>
+  <p>本文说明如何使用Azure PowerShell和 Azure Cli 创建DS系列虚拟机。</p>
+</blockquote>
 
 <hr />
 
-<h2 id="azure-publishsettingsfile">下载Azure PublishsettingsFile</h2>
+<h2 id="powershellds">使用powershell创建DS系列虚拟机</h2>
 
-<pre><code>`C:\Users\zhang.yiming&gt;azure account download -e AzureChinaCloud`
+<h3 id="section">创建高级存储账户</h3>
+
+<pre><code>`New-AzureStorageAccount -StorageAccountName "yourpremiumaccount" -Location "China East" -Type "Premium_LRS"`
 </code></pre>
-
-<p><img src="http://i.imgur.com/ai18X7X.png" alt="" /></p>
 
 <blockquote>
-  <p>请记录文件下载后的保存路径，导入时会用到
-## 导入Azure PublishsettingsFile ##</p>
+  <ul>
+    <li>创建高级存储帐户时，必须将 Type 参数指定为 Premium_LRS</li>
+  </ul>
 </blockquote>
 
-<pre><code>`C:\Users\zhang.yiming&gt;azure account import c:/Internal-004-Internal-002-WATSTest03
- -Internal-003-Internal-005-Internal-001-12-27-2015-credentials.publishsettings`
+<blockquote>
+  <ul>
+    <li>目前为止，尽在中国东部支持高级存储账号</li>
+  </ul>
+</blockquote>
+
+<h3 id="section-1">指定订阅及高级存储账户</h3>
+
+<pre><code>`Set-AzureSubscription -SubscriptionName "your subscription"  -CurrentStorageAccountName "yourpremiumaccount"`
 </code></pre>
 
-<h2 id="section">设置默认管理订阅</h2>
+<h3 id="ds-1">创建DS系列虚拟机</h3>
 
-<ul>
-  <li>
-    <p>列出目前可用的订阅</p>
+<pre><code> $storageAccount = "yourpremiumaccount"
+ $adminName = "youradmin"
+ $adminPassword = "yourpassword"
+ $vmName ="yourVM"
+ $location = "China East"
+ #操作系统2012 datacenter
+ $imageName = " 55bc2b193643443bb879a78bda516fc8__Windows-Server-2012-Datacenter-201504.01-zh.cn-127GB.vhd "
+ $vmSize ="Standard_DS2"
+ $OSDiskPath = "https://" + $storageAccount + ".blob.core.chinacloudapi.cn/vhds/" + $vmName + "_OS_PIO.vhd"
+ $vm = New-AzureVMConfig -Name $vmName -ImageName $imageName -InstanceSize $vmSize -MediaLocation $OSDiskPath
+ #windows 使用这条命令     
+ Add-AzureProvisioningConfig -Windows -VM $vm -AdminUsername $adminName -Password $adminPassword 
+ 	 New-AzureVM -ServiceName $vmName -VMs $VM -Location $location
+</code></pre>
 
-    <p><code>C:\Users\zhang.yiming&gt;azure account list</code>
-  <img src="http://i.imgur.com/0UkkjXJ.png" alt="" /></p>
-  </li>
-  <li>
-    <p>将需要设置PIP的虚拟机的订阅设置为默认订阅</p>
+<blockquote>
+  <p>如何获取当前可用的ImageName（由于Azure会定期更新ImageName，为了保证您能够填写正确的ImageName）可以通过下面的脚本查询一下。比如：</p>
 
-    <p><code>C:\Users\zhang.yiming&gt;azure account set 4c1f7e7c-****-****-****-****b58636</code>
-	 <img src="http://i.imgur.com/I8zF17J.png" alt="" /></p>
+  <pre><code>#操作系统类型OpenLogic 6.5，Windows Server 2012 R2 Datacenter (zh-cn)等
+$osfamliy="Windows Server 2012 R2 Datacenter (zh-cn)"  
+Get-AzureVMImage | Where-Object {
+$_.category -eq "Public" -and 
+($_.ImageFamily -eq $osfamliy -or $_.Label -eq $osfamliy )}| Sort-Object publisheddate -Descending|
+select imagename,os,label,publisheddate -First 1|
+Format-Table -AutoSize   ![](http://i.imgur.com/wNP3fCt.png) ### 为虚拟机附加磁盘 ###
+</code></pre>
+</blockquote>
 
-    <blockquote>
-      <p>安全原因部分信息被隐去，请按照实际情况填写</p>
-    </blockquote>
-  </li>
-  <li>
-    <p>查看虚拟机是否设置过PIP</p>
+<pre><code>$storageAccount = "yourpremiumaccount"
+$vmName ="yourVM"
+$vm = Get-AzureVM -ServiceName $vmName -Name $vmName
+$LunNo = 1	
+$path = "http://" + $storageAccount + ".blob.core.chinacloudapi.cn/vhds/" + "myDataDisk_" + $LunNo + "_PIO.vhd"
+$label = "Disk " + $LunNo
+Add-AzureDataDisk -CreateNew -MediaLocation $path -DiskSizeInGB 128 -DiskLabel $label -LUN 
+$LunNo -HostCaching ReadOnly -VM $vm | Update-AzureVm
+</code></pre>
 
-    <p><code>C:\Users\zhang.yiming&gt;azure vm public-ip list zymub</code></p>
+<h2 id="azure-cli-ds">使用Azure Cli 创建DS系列虚拟机</h2>
 
-    <p><img src="http://i.imgur.com/LxObm1m.png" alt="" /></p>
-  </li>
-  <li>
-    <p>为虚拟机设置PIP</p>
+<h3 id="section-2">创建高级存储账号</h3>
 
-    <p><code>C:\Users\zhang.yiming&gt;azure vm public-ip set zymub zymubpip</code></p>
+<pre><code>azure storage account create "premiumtestaccount" -l "china east" --type PLRS
+</code></pre>
 
-    <p><img src="http://i.imgur.com/mht9iWK.png" alt="" /></p>
-  </li>
-  <li>
-    <p>可以在检查一下当前的PIP</p>
+<h3 id="ds-2">创建DS系列虚拟机　</h3>
 
-    <p><code>C:\Users\zhang.yiming&gt;azure vm public-ip list zymub</code></p>
+<pre><code>azure vm create -z "Standard_DS2" -l "china east" -e 22 
+"premium-test-vm" "f1179221e23b4dbb89e39d70e5bc9e72__OpenLogic-CentOS-70-20150325" 
+--userName "youradminname" 
+-p "Passwd@123"
+</code></pre>
 
-    <p><img src="http://i.imgur.com/TBxOHCy.png" alt="" /></p>
+<blockquote>
+  <p>CentOS 7.0 为例</p>
+</blockquote>
 
-    <p><code>C:\Users\zhang.yiming&gt;azure vm show zymub</code></p>
+<h3 id="section-3">挂载数据磁盘</h3>
 
-    <p><img src="http://i.imgur.com/AP62cEh.png" alt="" /></p>
-  </li>
-</ul>
+<pre><code>azure vm disk attach-new premium-test-vm 128 "https://premiumtestaccount.blob.core.chinacloudapi.cn/vhds/myDataDisk_1_PIO.vhd"
+</code></pre>
 
 
                 <hr>
@@ -194,13 +224,9 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2016/01/03/how-to-config-and-check-Azure-ILB/" data-toggle="tooltip" data-placement="top" title="How To Config And Check Azure Ilb">&larr; Previous Post</a>
+                        <a href="/2016/01/10/how-to-reserve-PIP-for-Azure-VM-by-Cli/" data-toggle="tooltip" data-placement="top" title="How To Reserve Pip For Azure Vm By Cli">&larr; Previous Post</a>
                     </li>
                     
-                    
-                    <li class="next">
-                        <a href="/2016/01/13/how-to-create-DS-VM/" data-toggle="tooltip" data-placement="top" title="How To Create Ds Vm">Next Post &rarr;</a>
-                    </li>
                     
                 </ul>
 
@@ -218,16 +244,18 @@
                 </style>
 
                 <div class="ds-share"
-                    data-thread-key="/2016/01/10/how-to-reserve-PIP-for-Azure-VM-by-Cli" data-title="How To Reserve Pip For Azure Vm By Cli"
+                    data-thread-key="/2016/01/13/how-to-create-DS-VM" data-title="How To Create Ds Vm"
                     data-images="http://dafoyiming.cn/img/facebook.jpg"
-                    data-content="如何通过Azure Cli 创建PIP
+                    data-content="如何创建DS系列虚拟机
+
+
+  本文说明如何使用Azure PowerShell和 Azure Cli 创建DS系列虚拟机。
 
 
 
-下载Azure PublishsettingsFile
 
-`C:\Users\zhang.yiming&gt... | Microdust:Azeril's blog"
-                    data-url="http://dafoyiming.cn/2016/01/10/how-to-reserve-PIP-for-Azure-VM-by-Cli/">
+使用powershe... | Microdust:Azeril's blog"
+                    data-url="http://dafoyiming.cn/2016/01/13/how-to-create-DS-VM/">
                     <div class="ds-share-inline">
                       <ul  class="ds-share-icons-16">
 
@@ -246,7 +274,7 @@
 
                 <!-- 多说评论框 start -->
                 <div class="comment">
-                    <div class="ds-thread" data-thread-key="/2016/01/10/how-to-reserve-PIP-for-Azure-VM-by-Cli" data-title="How To Reserve Pip For Azure Vm By Cli" data-url="http://dafoyiming.cn/2016/01/10/how-to-reserve-PIP-for-Azure-VM-by-Cli/"></div>
+                    <div class="ds-thread" data-thread-key="/2016/01/13/how-to-create-DS-VM" data-title="How To Create Ds Vm" data-url="http://dafoyiming.cn/2016/01/13/how-to-create-DS-VM/"></div>
                 </div>
                 <!-- 多说评论框 end -->
             </div>

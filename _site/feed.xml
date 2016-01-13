@@ -5,9 +5,114 @@
     <description>张一鸣|大佛</description>
     <link>http://dafoyiming.cn/</link>
     <atom:link href="http://dafoyiming.cn/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sun, 10 Jan 2016 09:00:26 +0000</pubDate>
-    <lastBuildDate>Sun, 10 Jan 2016 09:00:26 +0000</lastBuildDate>
+    <pubDate>Wed, 13 Jan 2016 03:00:05 +0000</pubDate>
+    <lastBuildDate>Wed, 13 Jan 2016 03:00:05 +0000</lastBuildDate>
     <generator>Jekyll v2.4.0</generator>
+    
+      <item>
+        <title>How To Create Ds Vm</title>
+        <description>&lt;h1 id=&quot;ds&quot;&gt;如何创建DS系列虚拟机&lt;/h1&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;本文说明如何使用Azure PowerShell和 Azure Cli 创建DS系列虚拟机。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;powershellds&quot;&gt;使用powershell创建DS系列虚拟机&lt;/h2&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;创建高级存储账户&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;`New-AzureStorageAccount -StorageAccountName &quot;yourpremiumaccount&quot; -Location &quot;China East&quot; -Type &quot;Premium_LRS&quot;`
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;
+  &lt;ul&gt;
+    &lt;li&gt;创建高级存储帐户时，必须将 Type 参数指定为 Premium_LRS&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;ul&gt;
+    &lt;li&gt;目前为止，尽在中国东部支持高级存储账号&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;指定订阅及高级存储账户&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;`Set-AzureSubscription -SubscriptionName &quot;your subscription&quot;  -CurrentStorageAccountName &quot;yourpremiumaccount&quot;`
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;ds-1&quot;&gt;创建DS系列虚拟机&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt; $storageAccount = &quot;yourpremiumaccount&quot;
+ $adminName = &quot;youradmin&quot;
+ $adminPassword = &quot;yourpassword&quot;
+ $vmName =&quot;yourVM&quot;
+ $location = &quot;China East&quot;
+ #操作系统2012 datacenter
+ $imageName = &quot; 55bc2b193643443bb879a78bda516fc8__Windows-Server-2012-Datacenter-201504.01-zh.cn-127GB.vhd &quot;
+ $vmSize =&quot;Standard_DS2&quot;
+ $OSDiskPath = &quot;https://&quot; + $storageAccount + &quot;.blob.core.chinacloudapi.cn/vhds/&quot; + $vmName + &quot;_OS_PIO.vhd&quot;
+ $vm = New-AzureVMConfig -Name $vmName -ImageName $imageName -InstanceSize $vmSize -MediaLocation $OSDiskPath
+ #windows 使用这条命令     
+ Add-AzureProvisioningConfig -Windows -VM $vm -AdminUsername $adminName -Password $adminPassword 
+ 	 New-AzureVM -ServiceName $vmName -VMs $VM -Location $location
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;如何获取当前可用的ImageName（由于Azure会定期更新ImageName，为了保证您能够填写正确的ImageName）可以通过下面的脚本查询一下。比如：&lt;/p&gt;
+
+  &lt;pre&gt;&lt;code&gt;#操作系统类型OpenLogic 6.5，Windows Server 2012 R2 Datacenter (zh-cn)等
+$osfamliy=&quot;Windows Server 2012 R2 Datacenter (zh-cn)&quot;  
+Get-AzureVMImage | Where-Object {
+$_.category -eq &quot;Public&quot; -and 
+($_.ImageFamily -eq $osfamliy -or $_.Label -eq $osfamliy )}| Sort-Object publisheddate -Descending|
+select imagename,os,label,publisheddate -First 1|
+Format-Table -AutoSize   ![](http://i.imgur.com/wNP3fCt.png) ### 为虚拟机附加磁盘 ###
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;$storageAccount = &quot;yourpremiumaccount&quot;
+$vmName =&quot;yourVM&quot;
+$vm = Get-AzureVM -ServiceName $vmName -Name $vmName
+$LunNo = 1	
+$path = &quot;http://&quot; + $storageAccount + &quot;.blob.core.chinacloudapi.cn/vhds/&quot; + &quot;myDataDisk_&quot; + $LunNo + &quot;_PIO.vhd&quot;
+$label = &quot;Disk &quot; + $LunNo
+Add-AzureDataDisk -CreateNew -MediaLocation $path -DiskSizeInGB 128 -DiskLabel $label -LUN 
+$LunNo -HostCaching ReadOnly -VM $vm | Update-AzureVm
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;azure-cli-ds&quot;&gt;使用Azure Cli 创建DS系列虚拟机&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;创建高级存储账号&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;azure storage account create &quot;premiumtestaccount&quot; -l &quot;china east&quot; --type PLRS
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;ds-2&quot;&gt;创建DS系列虚拟机　&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;azure vm create -z &quot;Standard_DS2&quot; -l &quot;china east&quot; -e 22 
+&quot;premium-test-vm&quot; &quot;f1179221e23b4dbb89e39d70e5bc9e72__OpenLogic-CentOS-70-20150325&quot; 
+--userName &quot;youradminname&quot; 
+-p &quot;Passwd@123&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;CentOS 7.0 为例&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;section-3&quot;&gt;挂载数据磁盘&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;azure vm disk attach-new premium-test-vm 128 &quot;https://premiumtestaccount.blob.core.chinacloudapi.cn/vhds/myDataDisk_1_PIO.vhd&quot;
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+        <pubDate>Wed, 13 Jan 2016 00:00:00 +0000</pubDate>
+        <link>http://dafoyiming.cn/2016/01/13/how-to-create-DS-VM/</link>
+        <guid isPermaLink="true">http://dafoyiming.cn/2016/01/13/how-to-create-DS-VM/</guid>
+        
+        
+      </item>
     
       <item>
         <title>How To Reserve Pip For Azure Vm By Cli</title>
