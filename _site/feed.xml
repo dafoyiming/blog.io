@@ -5,8 +5,8 @@
     <description>张一鸣|大佛</description>
     <link>http://dafoyiming.cn/</link>
     <atom:link href="http://dafoyiming.cn/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Wed, 13 Jan 2016 03:15:20 +0000</pubDate>
-    <lastBuildDate>Wed, 13 Jan 2016 03:15:20 +0000</lastBuildDate>
+    <pubDate>Fri, 15 Jan 2016 15:03:42 +0000</pubDate>
+    <lastBuildDate>Fri, 15 Jan 2016 15:03:42 +0000</lastBuildDate>
     <generator>Jekyll v2.4.0</generator>
     
       <item>
@@ -23,24 +23,19 @@
 
 &lt;h3 id=&quot;section&quot;&gt;创建高级存储账户&lt;/h3&gt;
 
-&lt;pre&gt;&lt;code&gt;`New-AzureStorageAccount -StorageAccountName &quot;yourpremiumaccount&quot; -Location &quot;China East&quot; -Type &quot;Premium_LRS&quot;`
+&lt;pre&gt;&lt;code&gt;New-AzureStorageAccount -StorageAccountName &quot;yourpremiumaccount&quot; -Location &quot;China East&quot; -Type &quot;Premium_LRS&quot;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;blockquote&gt;
   &lt;ul&gt;
     &lt;li&gt;创建高级存储帐户时，必须将 Type 参数指定为 Premium_LRS&lt;/li&gt;
-  &lt;/ul&gt;
-&lt;/blockquote&gt;
-
-&lt;blockquote&gt;
-  &lt;ul&gt;
     &lt;li&gt;目前为止，尽在中国东部支持高级存储账号&lt;/li&gt;
   &lt;/ul&gt;
 &lt;/blockquote&gt;
 
 &lt;h3 id=&quot;section-1&quot;&gt;指定订阅及高级存储账户&lt;/h3&gt;
 
-&lt;pre&gt;&lt;code&gt;`Set-AzureSubscription -SubscriptionName &quot;your subscription&quot;  -CurrentStorageAccountName &quot;yourpremiumaccount&quot;`
+&lt;pre&gt;&lt;code&gt;Set-AzureSubscription -SubscriptionName &quot;your subscription&quot;  -CurrentStorageAccountName &quot;yourpremiumaccount&quot;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h3 id=&quot;ds-1&quot;&gt;创建DS系列虚拟机&lt;/h3&gt;
@@ -67,9 +62,15 @@ Get-AzureVMImage | Where-Object {
 $_.category -eq &quot;Public&quot; -and 
 ($_.ImageFamily -eq $osfamliy -or $_.Label -eq $osfamliy )}| Sort-Object publisheddate -Descending|
 select imagename,os,label,publisheddate -First 1|
-Format-Table -AutoSize   ![](http://i.imgur.com/wNP3fCt.png) ### 为虚拟机附加磁盘 ###
+Format-Table -AutoSize
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;img src=&quot;http://i.imgur.com/wNP3fCt.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;为虚拟机附加磁盘&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code&gt;$storageAccount = &quot;yourpremiumaccount&quot;
 $vmName =&quot;yourVM&quot;
@@ -83,7 +84,7 @@ $LunNo -HostCaching ReadOnly -VM $vm | Update-AzureVm
 
 &lt;h2 id=&quot;azure-cli-ds&quot;&gt;使用Azure Cli 创建DS系列虚拟机&lt;/h2&gt;
 
-&lt;h3 id=&quot;section-2&quot;&gt;创建高级存储账号&lt;/h3&gt;
+&lt;h3 id=&quot;section-3&quot;&gt;创建高级存储账号&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code&gt;azure storage account create &quot;premiumtestaccount&quot; -l &quot;china east&quot; --type PLRS
 &lt;/code&gt;&lt;/pre&gt;
@@ -100,7 +101,7 @@ $LunNo -HostCaching ReadOnly -VM $vm | Update-AzureVm
   &lt;p&gt;CentOS 7.0 为例&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id=&quot;section-3&quot;&gt;挂载数据磁盘&lt;/h3&gt;
+&lt;h3 id=&quot;section-4&quot;&gt;挂载数据磁盘&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code&gt;azure vm disk attach-new premium-test-vm 128 &quot;https://premiumtestaccount.blob.core.chinacloudapi.cn/vhds/myDataDisk_1_PIO.vhd&quot;
 &lt;/code&gt;&lt;/pre&gt;

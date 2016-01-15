@@ -134,24 +134,19 @@
 
 <h3 id="section">创建高级存储账户</h3>
 
-<pre><code>`New-AzureStorageAccount -StorageAccountName "yourpremiumaccount" -Location "China East" -Type "Premium_LRS"`
+<pre><code>New-AzureStorageAccount -StorageAccountName "yourpremiumaccount" -Location "China East" -Type "Premium_LRS"
 </code></pre>
 
 <blockquote>
   <ul>
     <li>创建高级存储帐户时，必须将 Type 参数指定为 Premium_LRS</li>
-  </ul>
-</blockquote>
-
-<blockquote>
-  <ul>
     <li>目前为止，尽在中国东部支持高级存储账号</li>
   </ul>
 </blockquote>
 
 <h3 id="section-1">指定订阅及高级存储账户</h3>
 
-<pre><code>`Set-AzureSubscription -SubscriptionName "your subscription"  -CurrentStorageAccountName "yourpremiumaccount"`
+<pre><code>Set-AzureSubscription -SubscriptionName "your subscription"  -CurrentStorageAccountName "yourpremiumaccount"
 </code></pre>
 
 <h3 id="ds-1">创建DS系列虚拟机</h3>
@@ -178,9 +173,15 @@ Get-AzureVMImage | Where-Object {
 $_.category -eq "Public" -and 
 ($_.ImageFamily -eq $osfamliy -or $_.Label -eq $osfamliy )}| Sort-Object publisheddate -Descending|
 select imagename,os,label,publisheddate -First 1|
-Format-Table -AutoSize   ![](http://i.imgur.com/wNP3fCt.png) ### 为虚拟机附加磁盘 ###
+Format-Table -AutoSize
 </code></pre>
 </blockquote>
+
+<blockquote>
+  <p><img src="http://i.imgur.com/wNP3fCt.png" alt="" /></p>
+</blockquote>
+
+<h3 id="section-2">为虚拟机附加磁盘</h3>
 
 <pre><code>$storageAccount = "yourpremiumaccount"
 $vmName ="yourVM"
@@ -194,7 +195,7 @@ $LunNo -HostCaching ReadOnly -VM $vm | Update-AzureVm
 
 <h2 id="azure-cli-ds">使用Azure Cli 创建DS系列虚拟机</h2>
 
-<h3 id="section-2">创建高级存储账号</h3>
+<h3 id="section-3">创建高级存储账号</h3>
 
 <pre><code>azure storage account create "premiumtestaccount" -l "china east" --type PLRS
 </code></pre>
@@ -211,7 +212,7 @@ $LunNo -HostCaching ReadOnly -VM $vm | Update-AzureVm
   <p>CentOS 7.0 为例</p>
 </blockquote>
 
-<h3 id="section-3">挂载数据磁盘</h3>
+<h3 id="section-4">挂载数据磁盘</h3>
 
 <pre><code>azure vm disk attach-new premium-test-vm 128 "https://premiumtestaccount.blob.core.chinacloudapi.cn/vhds/myDataDisk_1_PIO.vhd"
 </code></pre>

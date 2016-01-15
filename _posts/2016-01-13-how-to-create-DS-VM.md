@@ -9,16 +9,15 @@
 
 ### 创建高级存储账户 ###
 
-	`New-AzureStorageAccount -StorageAccountName "yourpremiumaccount" -Location "China East" -Type "Premium_LRS"`
+	New-AzureStorageAccount -StorageAccountName "yourpremiumaccount" -Location "China East" -Type "Premium_LRS"
 	
     
 > - 创建高级存储帐户时，必须将 Type 参数指定为 Premium_LRS
-
 > - 目前为止，尽在中国东部支持高级存储账号
 
 ### 指定订阅及高级存储账户 ###
 
-	`Set-AzureSubscription -SubscriptionName "your subscription"  -CurrentStorageAccountName "yourpremiumaccount"`
+	Set-AzureSubscription -SubscriptionName "your subscription"  -CurrentStorageAccountName "yourpremiumaccount"
 	
 ### 创建DS系列虚拟机 ###
     
@@ -43,7 +42,9 @@
 	($_.ImageFamily -eq $osfamliy -or $_.Label -eq $osfamliy )}| Sort-Object publisheddate -Descending|
 	select imagename,os,label,publisheddate -First 1|
 	Format-Table -AutoSize
+
 >   ![](http://i.imgur.com/wNP3fCt.png)
+
 ### 为虚拟机附加磁盘 ###
 
 	$storageAccount = "yourpremiumaccount"
