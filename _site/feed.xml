@@ -2,12 +2,160 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>大佛</title>
-    <description>张一鸣|大佛</description>
+    <description>张一鸣|善建者行</description>
     <link>http://dafoyiming.cn/</link>
     <atom:link href="http://dafoyiming.cn/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Fri, 15 Jan 2016 15:03:42 +0000</pubDate>
-    <lastBuildDate>Fri, 15 Jan 2016 15:03:42 +0000</lastBuildDate>
+    <pubDate>Fri, 05 Feb 2016 01:36:47 +0000</pubDate>
+    <lastBuildDate>Fri, 05 Feb 2016 01:36:47 +0000</lastBuildDate>
     <generator>Jekyll v2.4.0</generator>
+    
+      <item>
+        <title>How To Config Multiple Vip On Cloudservice</title>
+        <description>&lt;h1 id=&quot;azurevip&quot;&gt;关于Azure云服务部署多VIP&lt;/h1&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;部署架构&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://i.imgur.com/T6lVMkb.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;使用Azure官方的一个架构图,该架构基于SSL多站点服务的设计理念。此文中我们只实现多个VIP部署及终结点管理相关的实验&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;vip&quot;&gt;为云服务部署多VIP&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;设置Azure基础环境&lt;/p&gt;
+
+    &lt;pre&gt;&lt;code&gt; $serviceName = &#39;zymvips&#39;
+ $storageAccountName = &#39;zymvips&#39;
+ $location=&quot;China North&quot;
+    
+ #设置当前订阅环境
+ $subscription = Get-AzureSubscription -Current
+ New-AzureStorageAccount -StorageAccountName $storageAccountName -Location $location
+ Set-AzureSubscription -SubscriptionId $subscription.SubscriptionId -CurrentStorageAccountName $storageAccountName  
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;创建一个云服务及虚拟机（此操作也可以在Azure管理portal中完成）&lt;/p&gt;
+
+    &lt;pre&gt;&lt;code&gt; #查询当前可用的Windows Server 2012系统镜像
+ $osfamliy=&quot;Windows Server Essentials Experience on Windows Server 2012 R2 (zh-cn)&quot;
+ Get-AzureVMImage | Where-Object {$_.category -eq &quot;Public&quot; -and 
+ ($_.ImageFamily -eq $osfamliy -or $_.Label -eq $osfamliy )}| Sort-Object publisheddate -Descending|
+ select imagename,os,label,publisheddate -First 1|Format-Table -AutoSize 
+&lt;/code&gt;&lt;/pre&gt;
+
+    &lt;p&gt;&lt;img src=&quot;http://i.imgur.com/V6TE0tn.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+    &lt;blockquote&gt;
+      &lt;p&gt;记录下当前可用的镜像名称&lt;/p&gt;
+    &lt;/blockquote&gt;
+
+    &lt;pre&gt;&lt;code&gt; #创建虚拟机及云服务
+ $vmname = &#39;zymvips01&#39;
+ $vipName = &#39;VIP1&#39;
+ $image = &#39;0c5c79005aae478e8883bf950a861ce0__Windows-Server-2012-Essentials-20141204-zhcn&#39;
+ New-AzureVMConfig -ImageName $image -Name $vmname -InstanceSize &quot;Small&quot; |
+ Add-AzureProvisioningConfig -Windows -AdminUsername azure -Password &quot;Pa@!!w0rd&quot; |
+ New-AzureVM -ServiceName $serviceName -Location $location 
+&lt;/code&gt;&lt;/pre&gt;
+
+    &lt;blockquote&gt;
+      &lt;p&gt;请根据拓扑创建其他虚拟机，注意修改相关变量&lt;/p&gt;
+    &lt;/blockquote&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;为云服务添加多个VIP&lt;/p&gt;
+
+    &lt;pre&gt;&lt;code&gt; #查询一下当前云服务zymvips下有几个Vip
+ $deployment = Get-AzureDeployment -ServiceName $serviceName
+ $deployment.VirtualIPs.Count
+&lt;/code&gt;&lt;/pre&gt;
+
+    &lt;blockquote&gt;
+      &lt;p&gt;默认每个云服务下只有一个VIP&lt;/p&gt;
+    &lt;/blockquote&gt;
+
+    &lt;p&gt;&lt;img src=&quot;http://i.imgur.com/FCulEQE.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+    &lt;pre&gt;&lt;code&gt; $vipName = &#39;VIP1&#39;
+ Add-AzureVirtualIP -ServiceName $serviceName -VirtualIPName $vipName
+ #查询是否添加Vip
+ $deployment = Get-AzureDeployment -ServiceName $serviceName
+ $deployment.VirtualIPs  ![](http://i.imgur.com/amBvVUy.png)
+&lt;/code&gt;&lt;/pre&gt;
+
+    &lt;blockquote&gt;
+      &lt;ol&gt;
+        &lt;li&gt;如果未对新添加的Vip绑定终结点,系统则不会为vip1分配一个公网ip，后续我们添加这个关联&lt;/li&gt;
+        &lt;li&gt;请按照拓扑依次添加剩余的VIP，注意之前提到的修改相关变量名称&lt;/li&gt;
+      &lt;/ol&gt;
+    &lt;/blockquote&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;虚拟机添加终结点&lt;/p&gt;
+
+    &lt;pre&gt;&lt;code&gt; $endpoint = &#39;sslendportsonvip1&#39;
+ Get-AzureVM -ServiceName $serviceName| 
+ Add-AzureEndpoint -Name $endpoint -Protocol tcp -LocalPort 443 -PublicPort 443 -VirtualIPName $vipName | Update-AzureVM
+&lt;/code&gt;&lt;/pre&gt;
+
+    &lt;p&gt;&lt;img src=&quot;http://i.imgur.com/KSWUZ1W.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+    &lt;blockquote&gt;
+      &lt;p&gt;1.请按照以上语句根据拓扑依次添加VIP与终结点的关联，注意修改相关变量名称&lt;/p&gt;
+    &lt;/blockquote&gt;
+
+    &lt;blockquote&gt;
+      &lt;p&gt;2.这里发现一个问题：同一个云服务下不同VIP上同名的endpoint最多只能有两个，目前还不知道这个是系统设计还是系统BUG，因此建议您在给多个VIP配置endpoint的时候不要给endpoit配置一样的名字&lt;/p&gt;
+    &lt;/blockquote&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;虚拟机删除终结点&lt;/p&gt;
+
+    &lt;pre&gt;&lt;code&gt; Get-AzureVM -ServiceName $serviceName| Remove-AzureEndpoint -Name $endpoint | Update-AzureVM
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;删除多个VIP&lt;/p&gt;
+
+    &lt;pre&gt;&lt;code&gt; Remove-AzureVirtualIP -ServiceName $serviceName -VirtualIPName $vipName -Force
+&lt;/code&gt;&lt;/pre&gt;
+
+    &lt;blockquote&gt;
+      &lt;p&gt;删除VIP之前要确保已经提前删除了该VIP关联过的终结点（见第5节的介绍）&lt;/p&gt;
+    &lt;/blockquote&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;绑定多个VIP&lt;/p&gt;
+
+    &lt;pre&gt;&lt;code&gt; $reservedIPName = &#39;rvip1&#39;
+ $label = &#39;rvip1&#39;
+ $location = &quot;China North&quot;
+ $serviceName = &#39;zymvips&#39;
+ $vipName = &#39;VIP1&#39;
+ New-AzureReservedIP -ServiceName $serviceName -ReservedIPName $reservedIPName -Location $location -VirtualIPName $vipName
+ Get-AzureReservedIP -ReservedIPName $reservedIPName
+&lt;/code&gt;&lt;/pre&gt;
+
+    &lt;p&gt;&lt;img src=&quot;http://i.imgur.com/VBy0B9P.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;解除绑定VIP&lt;/p&gt;
+
+    &lt;pre&gt;&lt;code&gt;Remove-AzureReservedIP -ReservedIPName $reservedIPName -Force
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        <pubDate>Wed, 03 Feb 2016 00:00:00 +0000</pubDate>
+        <link>http://dafoyiming.cn/2016/02/03/how-to-config-multiple-VIP-on-Cloudservice/</link>
+        <guid isPermaLink="true">http://dafoyiming.cn/2016/02/03/how-to-config-multiple-VIP-on-Cloudservice/</guid>
+        
+        
+      </item>
     
       <item>
         <title>How To Create Ds Vm</title>
