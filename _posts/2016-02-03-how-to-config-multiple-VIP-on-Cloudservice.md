@@ -62,6 +62,7 @@
 		#查询是否添加Vip
 		$deployment = Get-AzureDeployment -ServiceName $serviceName
 		$deployment.VirtualIPs
+	
 	![](http://i.imgur.com/amBvVUy.png)
 	
 	>1. 如果未对新添加的Vip绑定终结点,系统则不会为vip1分配一个公网ip，后续我们添加这个关联
