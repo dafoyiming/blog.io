@@ -31,7 +31,9 @@
 		($_.ImageFamily -eq $osfamliy -or $_.Label -eq $osfamliy )}| Sort-Object publisheddate -Descending|
 		select imagename,os,label,publisheddate -First 1|Format-Table -AutoSize 
 
+	
 	![](http://i.imgur.com/V6TE0tn.png)
+	
 	
 	> 记录下当前可用的镜像名称
 		
