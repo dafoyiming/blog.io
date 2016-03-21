@@ -155,12 +155,13 @@
 
     <p>Import-Module ‘C:\Program Files (x86)\Microsoft SDKs\Azure\PowerShell\ServiceManagement\Azure\Azure.psd1’</p>
 
-    <pre><code>     - SnapshotVirtualMachine.ps1    51行
+    <div class="highlighter-rouge"><pre class="highlight"><code>     - SnapshotVirtualMachine.ps1    51行
      - RestoreVirtualMachine.ps1     48行
      - GetSnapshotList.ps1           43行
      - DeleteOldSnapshots.ps1        37行
      - Commom/RepositoryCommon.ps1   13行
 </code></pre>
+    </div>
   </li>
   <li>
     <p>修改Common/RepositoryCommon</p>
@@ -173,8 +174,9 @@
 
 <p>添加-Environment AzureChinaCloud</p>
 
-<pre><code>Set-AzureSubscription -Environment AzureChinaCloud -Certificate $managementCertificate -SubscriptionId $subscriptionId -CurrentStorageAccount $storageAccount -SubscriptionName $subscriptionName -SubscriptionDataFile $subscriptionDataFile
+<div class="highlighter-rouge"><pre class="highlight"><code>Set-AzureSubscription -Environment AzureChinaCloud -Certificate $managementCertificate -SubscriptionId $subscriptionId -CurrentStorageAccount $storageAccount -SubscriptionName $subscriptionName -SubscriptionDataFile $subscriptionDataFile
 </code></pre>
+</div>
 
 <ul>
   <li>120行</li>
@@ -182,8 +184,9 @@
 
 <p>添加-Environment AzureChinaCloud</p>
 
-<pre><code>Set-AzureSubscription -Environment AzureChinaCloud -Certificate $managementCertificate -SubscriptionId $subscriptionId -CurrentStorageAccount $storageAccount -SubscriptionName $subscriptionName -SubscriptionDataFile $subscriptionDataFile
+<div class="highlighter-rouge"><pre class="highlight"><code>Set-AzureSubscription -Environment AzureChinaCloud -Certificate $managementCertificate -SubscriptionId $subscriptionId -CurrentStorageAccount $storageAccount -SubscriptionName $subscriptionName -SubscriptionDataFile $subscriptionDataFile
 </code></pre>
+</div>
 
 <ul>
   <li>258行</li>
@@ -191,8 +194,9 @@
 
 <p>添加EndpointSuffix=core.chinacloudapi.cn;</p>
 
-<pre><code>$connectionString = "DefaultEndpointsProtocol=$($protocol);AccountName=$($storageAccountName);AccountKey=$($primaryKey);EndpointSuffix=core.chinacloudapi.cn;"
+<div class="highlighter-rouge"><pre class="highlight"><code>$connectionString = "DefaultEndpointsProtocol=$($protocol);AccountName=$($storageAccountName);AccountKey=$($primaryKey);EndpointSuffix=core.chinacloudapi.cn;"
 </code></pre>
+</div>
 
 <ul>
   <li>291行</li>
@@ -200,13 +204,15 @@
 
 <p>原代码 .core.windows.net</p>
 
-<pre><code>$matchList = [System.Text.RegularExpressions.Regex]::Match($blobUri, "^(?&lt;Protocol&gt;http[s]?)://(?&lt;StorageAccountName&gt;[^/]*)\.blob\.core\.windows\.net/(?&lt;ContainerName&gt;[^/]*)/(?&lt;BlobName&gt;.*)$", $regexOptionFlags)
+<div class="highlighter-rouge"><pre class="highlight"><code>$matchList = [System.Text.RegularExpressions.Regex]::Match($blobUri, "^(?&lt;Protocol&gt;http[s]?)://(?&lt;StorageAccountName&gt;[^/]*)\.blob\.core\.windows\.net/(?&lt;ContainerName&gt;[^/]*)/(?&lt;BlobName&gt;.*)$", $regexOptionFlags)
 </code></pre>
+</div>
 
 <p>新代码 .core.chinacloudapi.cn</p>
 
-<pre><code>$matchList = [System.Text.RegularExpressions.Regex]::Match($blobUri, "^(?&lt;Protocol&gt;http[s]?)://(?&lt;StorageAccountName&gt;[^/]*)\.blob\.core\.chinacloudapi\.cn/(?&lt;ContainerName&gt;[^/]*)/(?&lt;BlobName&gt;.*)$", $regexOptionFlags)
+<div class="highlighter-rouge"><pre class="highlight"><code>$matchList = [System.Text.RegularExpressions.Regex]::Match($blobUri, "^(?&lt;Protocol&gt;http[s]?)://(?&lt;StorageAccountName&gt;[^/]*)\.blob\.core\.chinacloudapi\.cn/(?&lt;ContainerName&gt;[^/]*)/(?&lt;BlobName&gt;.*)$", $regexOptionFlags)
 </code></pre>
+</div>
 
 <h2 id="section-2">脚本执行</h2>
 
@@ -214,32 +220,36 @@
   <li>
     <p>创建虚拟机镜像</p>
 
-    <pre><code> PS C:\Scripts&gt; .\SnapshotVirtualMachine.ps1 -subscriptionName Internal-002 -cloudServiceName zymub -virtualMachineName zymub -shutdownMachine -snapshotOsDisk  -snapshotDataDisks
+    <div class="highlighter-rouge"><pre class="highlight"><code> PS C:\Scripts&gt; .\SnapshotVirtualMachine.ps1 -subscriptionName Internal-002 -cloudServiceName zymub -virtualMachineName zymub -shutdownMachine -snapshotOsDisk  -snapshotDataDisks
 </code></pre>
+    </div>
 
     <p><img src="http://i.imgur.com/1IsxOO9.png" alt="" /></p>
   </li>
   <li>
     <p>列出虚拟机已有的镜像</p>
 
-    <pre><code> PS C:\Scripts&gt; .\GetSnapshotList.ps1 -subscriptionName Internal-002 -cloudServiceName zymub -virtualMachineName zymub -maximumDays 15
+    <div class="highlighter-rouge"><pre class="highlight"><code> PS C:\Scripts&gt; .\GetSnapshotList.ps1 -subscriptionName Internal-002 -cloudServiceName zymub -virtualMachineName zymub -maximumDays 15
 </code></pre>
+    </div>
 
     <p><img src="http://i.imgur.com/6o3BQx1.png" alt="" /></p>
   </li>
   <li>
     <p>清除虚拟机镜像</p>
 
-    <pre><code> PS C:\Scripts&gt; .\DeleteOldSnapshots.ps1 -subscriptionName Internal-002 -cloudServiceName zymub -virtualMachineName zymub -maximumDays 1
+    <div class="highlighter-rouge"><pre class="highlight"><code> PS C:\Scripts&gt; .\DeleteOldSnapshots.ps1 -subscriptionName Internal-002 -cloudServiceName zymub -virtualMachineName zymub -maximumDays 1
 </code></pre>
+    </div>
 
     <p><img src="http://i.imgur.com/U7PtugE.png" alt="" /></p>
   </li>
   <li>
     <p>还原虚拟机</p>
 
-    <pre><code> PS C:\Scripts&gt; .\RestoreVirtualMachine.ps1 -subscriptionName Internal-002 -cloudServiceName zymub -virtualMachineName zymub -utcRestoreDate "2015-DEC-26 10:05:43"
+    <div class="highlighter-rouge"><pre class="highlight"><code> PS C:\Scripts&gt; .\RestoreVirtualMachine.ps1 -subscriptionName Internal-002 -cloudServiceName zymub -virtualMachineName zymub -utcRestoreDate "2015-DEC-26 10:05:43"
 </code></pre>
+    </div>
 
     <p><img src="http://i.imgur.com/BJPtCSC.png" alt="" /></p>
   </li>

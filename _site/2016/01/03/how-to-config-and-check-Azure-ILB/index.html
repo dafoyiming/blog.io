@@ -133,17 +133,18 @@
 </blockquote>
 
 <h2 id="ilb">设置ILB</h2>
-<pre><code>$svc="zymilb"
+<div class="highlighter-rouge"><pre class="highlight"><code>$svc="zymilb"
 $ilb="zym"
 $subnet="subnet01"
 $IP="10.0.0.10"
 Add-AzureInternalLoadBalancer -ServiceName $svc -InternalLoadBalancerName $ilb –SubnetName $subnet –StaticVNetIPAddress $IP
 </code></pre>
+</div>
 
 <h2 id="ilb-1">添加虚机到ILB</h2>
 
 <h3 id="udp">添加UDP端口</h3>
-<pre><code>$svc="zymilb"
+<div class="highlighter-rouge"><pre class="highlight"><code>$svc="zymilb"
 $vmname="zym01"
 $epname="InternalUDP"
 $lbsetname="UDP"
@@ -154,9 +155,10 @@ $ilb="zym"
 Get-AzureVM –ServiceName $svc –Name $vmname | Add-AzureEndpoint -Name $epname -LbsetName $lbsetname -Protocol $prot
 -LocalPort $locport -PublicPort $pubport –DefaultProbe -InternalLoadBalancerName $ilb | Update-AzureVM
 </code></pre>
+</div>
 
 <h3 id="tcp">添加TCP端口</h3>
-<pre><code>$svc="zymilb"
+<div class="highlighter-rouge"><pre class="highlight"><code>$svc="zymilb"
 $vmname="zym01"
 $epname="InternalTCP"
 $lbsetname="TCP"
@@ -167,6 +169,7 @@ $ilb="zym"
 Get-AzureVM –ServiceName $svc –Name $vmname | Add-AzureEndpoint -Name $epname -LbsetName $lbsetname -Protocol $prot
 -LocalPort $locport -PublicPort $pubport –DefaultProbe -InternalLoadBalancerName $ilb | Update-AzureVM`
 </code></pre>
+</div>
 
 <blockquote>
   <p>zym02、zym03 只需修改$vmname变量即可</p>
@@ -179,12 +182,12 @@ Get-AzureVM –ServiceName $svc –Name $vmname | Add-AzureEndpoint -Name $epnam
   <li>
     <p>分别在zym01，zym02，zym03上抓包</p>
 
-    <p><code>[azureuser@zym01 ~]$ sudo tcpdump -i any -vnn udp port 53</code></p>
+    <p><code class="highlighter-rouge">[azureuser@zym01 ~]$ sudo tcpdump -i any -vnn udp port 53</code></p>
   </li>
   <li>
     <p>在zymclient上多次向ILB VIP 扫描53端口</p>
 
-    <p><code>[azureuser@zymclient ~]$ nc -vuz 10.0.0.10 53</code></p>
+    <p><code class="highlighter-rouge">[azureuser@zymclient ~]$ nc -vuz 10.0.0.10 53</code></p>
   </li>
   <li>
     <p>在zym01上发现这样的UDP包</p>
@@ -233,12 +236,12 @@ Get-AzureVM –ServiceName $svc –Name $vmname | Add-AzureEndpoint -Name $epnam
   <li>
     <p>分别在zym01，zym02，zym03上抓包</p>
 
-    <p><code>[azureuser@zym01 ~]$ sudo tcpdump -i any -vnn tcp port 80</code></p>
+    <p><code class="highlighter-rouge">[azureuser@zym01 ~]$ sudo tcpdump -i any -vnn tcp port 80</code></p>
   </li>
   <li>
     <p>在zymclient上多次请求80端口服务</p>
 
-    <p><code>[azureuser@zymclient ~]$ curl 10.0.0.6:80</code></p>
+    <p><code class="highlighter-rouge">[azureuser@zymclient ~]$ curl 10.0.0.6:80</code></p>
   </li>
   <li>
     <p>在zym01上发现这样的TCP包</p>
@@ -297,9 +300,10 @@ Get-AzureVM –ServiceName $svc –Name $vmname | Add-AzureEndpoint -Name $epnam
 
 <p>针对UDP端口不做Probe监测。在创建添加endpoint的时候我们可以指定-Noprobe，这样问题就解决了</p>
 
-<pre><code>Get-AzureVM –ServiceName $svc –Name $vmname | Add-AzureEndpoint -Name $epname -LbsetName $lbsetname -Protocol $prot
+<div class="highlighter-rouge"><pre class="highlight"><code>Get-AzureVM –ServiceName $svc –Name $vmname | Add-AzureEndpoint -Name $epname -LbsetName $lbsetname -Protocol $prot
 -LocalPort $locport -PublicPort $pubport –NoProbe -InternalLoadBalancerName $ilb | Update-AzureVM`
 </code></pre>
+</div>
 
 
                 <hr>

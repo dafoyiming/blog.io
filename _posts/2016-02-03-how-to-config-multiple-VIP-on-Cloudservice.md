@@ -71,7 +71,7 @@
 3. 虚拟机添加终结点
 		
 		$endpoint = 'sslendportsonvip1'
-		Get-AzureVM -ServiceName $serviceName| 
+		Get-AzureVM -ServiceName $serviceName -Name $vmname| 
 		Add-AzureEndpoint -Name $endpoint -Protocol tcp -LocalPort 443 -PublicPort 443 -VirtualIPName $vipName | Update-AzureVM
 	
 	![](http://i.imgur.com/KSWUZ1W.png)
@@ -81,7 +81,7 @@
 	>2.这里发现一个问题：同一个云服务下不同VIP上同名的endpoint最多只能有两个，目前还不知道这个是系统设计还是系统BUG，因此建议您在给多个VIP配置endpoint的时候不要给endpoit配置一样的名字
 4. 虚拟机删除终结点
 		
-		Get-AzureVM -ServiceName $serviceName| Remove-AzureEndpoint -Name $endpoint | Update-AzureVM
+		Get-AzureVM -ServiceName $serviceName -Name $vmname | Remove-AzureEndpoint -Name $endpoint | Update-AzureVM
 
 5. 删除多个VIP
 

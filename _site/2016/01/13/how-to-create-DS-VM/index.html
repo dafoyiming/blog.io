@@ -134,8 +134,9 @@
 
 <h3 id="section">创建高级存储账户</h3>
 
-<pre><code>New-AzureStorageAccount -StorageAccountName "yourpremiumaccount" -Location "China East" -Type "Premium_LRS"
+<div class="highlighter-rouge"><pre class="highlight"><code>New-AzureStorageAccount -StorageAccountName "yourpremiumaccount" -Location "China East" -Type "Premium_LRS"
 </code></pre>
+</div>
 
 <blockquote>
   <ul>
@@ -146,12 +147,13 @@
 
 <h3 id="section-1">指定订阅及高级存储账户</h3>
 
-<pre><code>Set-AzureSubscription -SubscriptionName "your subscription"  -CurrentStorageAccountName "yourpremiumaccount"
+<div class="highlighter-rouge"><pre class="highlight"><code>Set-AzureSubscription -SubscriptionName "your subscription"  -CurrentStorageAccountName "yourpremiumaccount"
 </code></pre>
+</div>
 
 <h3 id="ds-1">创建DS系列虚拟机</h3>
 
-<pre><code> $storageAccount = "yourpremiumaccount"
+<div class="highlighter-rouge"><pre class="highlight"><code> $storageAccount = "yourpremiumaccount"
  $adminName = "youradmin"
  $adminPassword = "yourpassword"
  $vmName ="yourVM"
@@ -163,11 +165,12 @@
  Add-AzureProvisioningConfig -Windows -VM $vm -AdminUsername $adminName -Password $adminPassword 
  New-AzureVM -ServiceName $vmName -VMs $VM -Location $location
 </code></pre>
+</div>
 
 <blockquote>
   <p>如何获取当前可用的ImageName（由于Azure会定期更新ImageName，为了保证您能够填写正确的ImageName）可以通过下面的脚本查询一下。比如：</p>
 
-  <pre><code>#操作系统类型OpenLogic 6.5，Windows Server 2012 R2 Datacenter (zh-cn)等
+  <div class="highlighter-rouge"><pre class="highlight"><code>#操作系统类型OpenLogic 6.5，Windows Server 2012 R2 Datacenter (zh-cn)等
 $osfamliy="Windows Server 2012 R2 Datacenter (zh-cn)"  
 Get-AzureVMImage | Where-Object {
 $_.category -eq "Public" -and 
@@ -175,6 +178,7 @@ $_.category -eq "Public" -and
 select imagename,os,label,publisheddate -First 1|
 Format-Table -AutoSize
 </code></pre>
+  </div>
 </blockquote>
 
 <blockquote>
@@ -183,7 +187,7 @@ Format-Table -AutoSize
 
 <h3 id="section-2">为虚拟机附加磁盘</h3>
 
-<pre><code>$storageAccount = "yourpremiumaccount"
+<div class="highlighter-rouge"><pre class="highlight"><code>$storageAccount = "yourpremiumaccount"
 $vmName ="yourVM"
 $vm = Get-AzureVM -ServiceName $vmName -Name $vmName
 $LunNo = 1	
@@ -192,21 +196,24 @@ $label = "Disk " + $LunNo
 Add-AzureDataDisk -CreateNew -MediaLocation $path -DiskSizeInGB 128 -DiskLabel $label -LUN 
 $LunNo -HostCaching ReadOnly -VM $vm | Update-AzureVm
 </code></pre>
+</div>
 
 <h2 id="azure-cli-ds">使用Azure Cli 创建DS系列虚拟机</h2>
 
 <h3 id="section-3">创建高级存储账号</h3>
 
-<pre><code>azure storage account create "premiumtestaccount" -l "china east" --type PLRS
+<div class="highlighter-rouge"><pre class="highlight"><code>azure storage account create "premiumtestaccount" -l "china east" --type PLRS
 </code></pre>
+</div>
 
 <h3 id="ds-2">创建DS系列虚拟机　</h3>
 
-<pre><code>azure vm create -z "Standard_DS2" -l "china east" -e 22 
+<div class="highlighter-rouge"><pre class="highlight"><code>azure vm create -z "Standard_DS2" -l "china east" -e 22 
 "premium-test-vm" "f1179221e23b4dbb89e39d70e5bc9e72__OpenLogic-CentOS-70-20150325" 
 --userName "youradminname" 
 -p "Passwd@123"
 </code></pre>
+</div>
 
 <blockquote>
   <p>CentOS 7.0 为例</p>
@@ -214,8 +221,9 @@ $LunNo -HostCaching ReadOnly -VM $vm | Update-AzureVm
 
 <h3 id="section-4">挂载数据磁盘</h3>
 
-<pre><code>azure vm disk attach-new premium-test-vm 128 "https://premiumtestaccount.blob.core.chinacloudapi.cn/vhds/myDataDisk_1_PIO.vhd"
+<div class="highlighter-rouge"><pre class="highlight"><code>azure vm disk attach-new premium-test-vm 128 "https://premiumtestaccount.blob.core.chinacloudapi.cn/vhds/myDataDisk_1_PIO.vhd"
 </code></pre>
+</div>
 
 
                 <hr>

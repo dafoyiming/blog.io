@@ -128,8 +128,9 @@
 
 <h2 id="azure-publishsettingsfile">下载Azure PublishsettingsFile</h2>
 
-<pre><code>`C:\Users\zhang.yiming&gt;azure account download -e AzureChinaCloud`
+<div class="highlighter-rouge"><pre class="highlight"><code>`C:\Users\zhang.yiming&gt;azure account download -e AzureChinaCloud`
 </code></pre>
+</div>
 
 <p><img src="http://i.imgur.com/ai18X7X.png" alt="" /></p>
 
@@ -138,9 +139,10 @@
 ## 导入Azure PublishsettingsFile ##</p>
 </blockquote>
 
-<pre><code>`C:\Users\zhang.yiming&gt;azure account import c:/Internal-004-Internal-002-WATSTest03
+<div class="highlighter-rouge"><pre class="highlight"><code>`C:\Users\zhang.yiming&gt;azure account import c:/Internal-004-Internal-002-WATSTest03
  -Internal-003-Internal-005-Internal-001-12-27-2015-credentials.publishsettings`
 </code></pre>
+</div>
 
 <h2 id="section">设置默认管理订阅</h2>
 
@@ -148,13 +150,13 @@
   <li>
     <p>列出目前可用的订阅</p>
 
-    <p><code>C:\Users\zhang.yiming&gt;azure account list</code>
+    <p><code class="highlighter-rouge">C:\Users\zhang.yiming&gt;azure account list</code>
   <img src="http://i.imgur.com/0UkkjXJ.png" alt="" /></p>
   </li>
   <li>
     <p>将需要设置PIP的虚拟机的订阅设置为默认订阅</p>
 
-    <p><code>C:\Users\zhang.yiming&gt;azure account set 4c1f7e7c-****-****-****-****b58636</code>
+    <p><code class="highlighter-rouge">C:\Users\zhang.yiming&gt;azure account set 4c1f7e7c-****-****-****-****b58636</code>
 	 <img src="http://i.imgur.com/I8zF17J.png" alt="" /></p>
 
     <blockquote>
@@ -164,25 +166,25 @@
   <li>
     <p>查看虚拟机是否设置过PIP</p>
 
-    <p><code>C:\Users\zhang.yiming&gt;azure vm public-ip list zymub</code></p>
+    <p><code class="highlighter-rouge">C:\Users\zhang.yiming&gt;azure vm public-ip list zymub</code></p>
 
     <p><img src="http://i.imgur.com/LxObm1m.png" alt="" /></p>
   </li>
   <li>
     <p>为虚拟机设置PIP</p>
 
-    <p><code>C:\Users\zhang.yiming&gt;azure vm public-ip set zymub zymubpip</code></p>
+    <p><code class="highlighter-rouge">C:\Users\zhang.yiming&gt;azure vm public-ip set zymub zymubpip</code></p>
 
     <p><img src="http://i.imgur.com/mht9iWK.png" alt="" /></p>
   </li>
   <li>
     <p>可以在检查一下当前的PIP</p>
 
-    <p><code>C:\Users\zhang.yiming&gt;azure vm public-ip list zymub</code></p>
+    <p><code class="highlighter-rouge">C:\Users\zhang.yiming&gt;azure vm public-ip list zymub</code></p>
 
     <p><img src="http://i.imgur.com/TBxOHCy.png" alt="" /></p>
 
-    <p><code>C:\Users\zhang.yiming&gt;azure vm show zymub</code></p>
+    <p><code class="highlighter-rouge">C:\Users\zhang.yiming&gt;azure vm show zymub</code></p>
 
     <p><img src="http://i.imgur.com/AP62cEh.png" alt="" /></p>
   </li>
