@@ -27,8 +27,8 @@
 
 > 1. 请按照参数说明填写
 > 2. DAYSOFWEEKTOEXECUTE
-     -：表示不备份 X：表示备份
-     -XXXXXX- 表示周日和周六不备份
+     -：表示不执行 X：表示执行
+     -XXXXX- 表示周日和周六不执行
 
 ## 发布RUNBOOK ##
 
@@ -109,5 +109,5 @@
 	}
 
 > 1.虚拟机开机RUNBOOK可以通过修改 
-> Stop-AzureVM -ServiceName $cloudServiceName -Name $vmName -StayProvisioned 
-> 为Start-AzureVM -ServiceName $cloudServiceName -Name $vmName命令来实现
+> `Stop-AzureVM -ServiceName $cloudServiceName -Name $vmName -StayProvisioned` 
+> 为`Start-AzureVM -ServiceName $cloudServiceName -Name $vmName`命令来实现
