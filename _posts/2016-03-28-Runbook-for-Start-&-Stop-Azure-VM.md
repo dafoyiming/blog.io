@@ -1,18 +1,18 @@
-# 通过Azure Automation 实现虚拟机按照时间开/关机  #
+# 通过Automation实现虚拟机按照时间开/关机 #
 
 
 - 解决之前的脚本无法通过*星期几*来设置虚拟机定时开关机的问题
 
 
-##创建一个自动管理账户##
+## 创建一个自动管理账户 ##
 ![](http://i.imgur.com/za0V8ng.png)
 
-##创建一个RUNBOOK##
+## 创建一个RUNBOOK ##
 ![](http://i.imgur.com/icBUMBo.png)
 
 > 1. RUNBOOK的名称需要和脚本中的WORKFLOW名称一致
 
-##在草稿中编写您的RUNBOOK##
+## 在草稿中编写您的RUNBOOK ##
 ![](http://i.imgur.com/aJdh4cH.png)
 
 > 1.脚本请参考本文后面的附件，只需拷贝进去就可以
