@@ -47,7 +47,6 @@ IISInstall.ps :
     
 	PS C:\Users\zhang.yiming> Publish-AzureRmVMDscConfiguration -ConfigurationPath D:\examples\IISInstall.ps1
 
-
 ![](http://i.imgur.com/WwtAYWx.png)
 
 发布后可以在上图中的Blob中看到DSC配置包，也可以在Ibiza中看到
@@ -87,12 +86,14 @@ IISInstall.ps :
   下载地址https://gallery.technet.microsoft.com/xAzure-PowerShell-Module-7dbf43b4
 - 将安装包解压复制到C:\Program Files\WindowsPowerShell\Modules\目录下
 - 测试module是否已经被加载
+
 	PS C:\Users\zhang.yiming> Get-DscResource
+	
   ![](http://i.imgur.com/wjttCiV.png)
 
 - 创建DSC配置文件
   
-		C:\examples\FourthCoffee.ps1
+	C:\examples\FourthCoffee.ps1
 
 ----------
 	configuration FourthCoffee 
