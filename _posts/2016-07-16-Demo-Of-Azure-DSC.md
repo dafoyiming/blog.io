@@ -45,7 +45,8 @@ IISInstall.ps :
 
 - 发布PS文件
     
-	PS C:\Users\zhang.yiming> Publish-AzureRmVMDscConfiguration -ConfigurationPath D:\examples\IISInstall.ps1 
+	PS C:\Users\zhang.yiming> Publish-AzureRmVMDscConfiguration -ConfigurationPath D:\examples\IISInstall.ps1
+
 
 ![](http://i.imgur.com/WwtAYWx.png)
 
