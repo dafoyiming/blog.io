@@ -87,31 +87,32 @@ IISInstall.ps :
   下载地址https://gallery.technet.microsoft.com/xAzure-PowerShell-Module-7dbf43b4
 - 将安装包解压复制到C:\Program Files\WindowsPowerShell\Modules\目录下
 - 测试module是否已经被加载
-  `PS C:\Users\zhang.yiming> Get-DscResource`
+  
+	PS C:\Users\zhang.yiming> Get-DscResource
   ![](http://i.imgur.com/wjttCiV.png)
 
 - 创建DSC配置文件
   C:\examples\FourthCoffee.ps1
-  		configuration FourthCoffee 
-		  { 
-            #由于可能出现多个xWebAdministration版本同时存在，因此建议添加ModuleVersion这个参数
-    		Import-DscResource -ModuleName xWebAdministration -ModuleVersion 1.3.2.4 
+  			configuration FourthCoffee 
+		  	{ 
+            	#由于可能出现多个xWebAdministration版本同时存在，因此建议添加ModuleVersion这个参数
+    			Import-DscResource -ModuleName xWebAdministration -ModuleVersion 1.3.2.4 
 
-   			 # Install the IIS role 
+   			 	# Install the IIS role 
     			WindowsFeature IIS  
     			{  
         			Ensure          = “Present”  
         			Name            = “Web-Server”  
     			}  
   
-    		# Install the ASP .NET 4.5 role  
+    			# Install the ASP .NET 4.5 role  
     			WindowsFeature AspNet45  
     			{  
         			Ensure          = “Present”  
         			Name            = “Web-Asp-Net45”  
     			}  
 
-    		# Stop the default website  
+    			# Stop the default website  
     			xWebsite DefaultSite 
     			{  
         			Ensure          = “Present”  
@@ -121,15 +122,15 @@ IISInstall.ps :
         			DependsOn       = “[WindowsFeature]IIS”  
     			}  
   
-		    # Copy the website content  
-		    File WebContent  
-		    {  
-		        Ensure          = “Present”  
-		        SourcePath      = “C:\Program Files\WindowsPowerShell\Modules\xWebAdministration\BakeryWebsite” 
-		        DestinationPath = “C:\inetpub\FourthCoffee” 
-		        Recurse         = $true  
-		        Type            = “Directory”  
-		        DependsOn       = “[WindowsFeature]AspNet45”  
+		    	# Copy the website content  
+		    	File WebContent  
+		    	{  
+		        	Ensure          = “Present”  
+		        	SourcePath      = “C:\Program Files\WindowsPowerShell\Modules\xWebAdministration\BakeryWebsite” 
+		        	DestinationPath = “C:\inetpub\FourthCoffee” 
+		        	Recurse         = $true  
+		        	Type            = “Directory”  
+		        	DependsOn       = “[WindowsFeature]AspNet45”  
 			    }   
 			
 			    # Create a new website  
