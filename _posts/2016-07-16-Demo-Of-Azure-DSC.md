@@ -99,7 +99,7 @@ IISInstall.ps :
 		#由于可能出现多个xWebAdministration版本同时存在，因此建议添加ModuleVersion这个参数
     	Import-DscResource -ModuleName xWebAdministration -ModuleVersion 1.3.2.4 
 
-   		# Install the IIS role 
+   			# Install the IIS role 
     	WindowsFeature IIS  
     	{  
         	Ensure          = “Present”  
@@ -144,6 +144,7 @@ IISInstall.ps :
 			DependsOn       = “[File]WebContent”  
 		} 
 	}
+
 - 将新的首页文件复制到xWebAdministration模块的目录下，DSC配置发布的时候会自动将这个目录中的首页资源一并打包的zip文件中并上传到Azure存储账号：
    ![](http://i.imgur.com/MH91ysS.png)
 
