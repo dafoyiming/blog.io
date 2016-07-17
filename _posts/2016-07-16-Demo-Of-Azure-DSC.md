@@ -98,7 +98,6 @@ IISInstall.ps :
 	{ 
 		#由于可能出现多个xWebAdministration版本同时存在，因此建议添加ModuleVersion这个参数
     	Import-DscResource -ModuleName xWebAdministration -ModuleVersion 1.3.2.4 
-
 		# Install the IIS role 
     	WindowsFeature IIS  
     	{  
