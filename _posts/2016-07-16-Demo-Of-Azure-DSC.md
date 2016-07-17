@@ -151,7 +151,9 @@ IISInstall.ps :
 	
 		Publish-AzureRmVMDscConfiguration -ConfigurationPath C:\examples\FourthCoffee.ps1 `
 		-ResourceGroupName zymgrp -StorageAccountName zymstore
+
 - 启动DSC配置
+		
 		Set-AzureRmVMDscExtension -ResourceGroupName zymgrp -VMName zymvm2 `
 		-ArchiveBlobNameFourthCoffee.ps1.zip -ArchiveStorageAccountName zymstore -Version '2.19' `
 		-ConfigurationName "FourthCoffee" 
