@@ -83,12 +83,12 @@
 		
 		Get-AzureVM -ServiceName $serviceName -Name $vmname | Remove-AzureEndpoint -Name $endpoint | Update-AzureVM
 
-5. 删除多个VIP
+5. 删除VIP
 
 		Remove-AzureVirtualIP -ServiceName $serviceName -VirtualIPName $vipName -Force
 	
 	> 删除VIP之前要确保已经提前删除了该VIP关联过的终结点（见第5节的介绍）
-6. 绑定多个VIP
+6. 绑定VIP
 
 		$reservedIPName = 'rvip1'
 		$label = 'rvip1'
