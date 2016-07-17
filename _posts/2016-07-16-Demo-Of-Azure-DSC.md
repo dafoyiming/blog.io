@@ -45,7 +45,6 @@ IISInstall.ps :
 
 - 发布PS文件
     
-		
 	PS C:\Users\zhang.yiming> Publish-AzureRmVMDscConfiguration -ConfigurationPath D:\examples\IISInstall.ps1 
 
 ![](http://i.imgur.com/WwtAYWx.png)
@@ -60,8 +59,8 @@ IISInstall.ps :
 
 > 如果虚拟机在创建过程中并未安装此扩展，则在设置DSC扩展的过程中会自动安装这个扩展。（目前经过测试通过Ibiza来安装这个扩展还有问题，不建议使用Ibiza来创建）
 
-    PS C:\Users\zhang.yiming> Set-AzureRmVMDscExtension -ResourceGroupName zymgrp -VMName zymvm2 `
-     -ArchiveBlobName IISInstall.ps1.zip -ArchiveStorageAccountName zymstore -Version '2.19' -ConfigurationName “IISInstall”
+	PS C:\Users\zhang.yiming> Set-AzureRmVMDscExtension -ResourceGroupName zymgrp -VMName zymvm2 `
+	-ArchiveBlobName IISInstall.ps1.zip -ArchiveStorageAccountName zymstore -Version '2.19' -ConfigurationName "IISInstall"
 
 ![](http://i.imgur.com/xUbOlxB.png)
 
@@ -87,71 +86,75 @@ IISInstall.ps :
   下载地址https://gallery.technet.microsoft.com/xAzure-PowerShell-Module-7dbf43b4
 - 将安装包解压复制到C:\Program Files\WindowsPowerShell\Modules\目录下
 - 测试module是否已经被加载
-  
 	PS C:\Users\zhang.yiming> Get-DscResource
   ![](http://i.imgur.com/wjttCiV.png)
 
 - 创建DSC配置文件
-  C:\examples\FourthCoffee.ps1
-  			configuration FourthCoffee 
-		  	{ 
-            	#由于可能出现多个xWebAdministration版本同时存在，因此建议添加ModuleVersion这个参数
-    			Import-DscResource -ModuleName xWebAdministration -ModuleVersion 1.3.2.4 
-
-   			 	# Install the IIS role 
-    			WindowsFeature IIS  
-    			{  
-        			Ensure          = “Present”  
-        			Name            = “Web-Server”  
-    			}  
   
-    			# Install the ASP .NET 4.5 role  
-    			WindowsFeature AspNet45  
-    			{  
-        			Ensure          = “Present”  
-        			Name            = “Web-Asp-Net45”  
-    			}  
+		C:\examples\FourthCoffee.ps1
 
-    			# Stop the default website  
-    			xWebsite DefaultSite 
-    			{  
-        			Ensure          = “Present”  
-        			Name            = “Default Web Site”  
-        			State           = “Stopped”  
-        			PhysicalPath    = “C:\inetpub\wwwroot”  
-        			DependsOn       = “[WindowsFeature]IIS”  
-    			}  
+----------
+	configuration FourthCoffee 
+	{ 
+		#由于可能出现多个xWebAdministration版本同时存在，因此建议添加ModuleVersion这个参数
+    	Import-DscResource -ModuleName xWebAdministration -ModuleVersion 1.3.2.4 
+
+   		# Install the IIS role 
+    	WindowsFeature IIS  
+    	{  
+        	Ensure          = “Present”  
+        	Name            = “Web-Server”  
+    	}  
   
-		    	# Copy the website content  
-		    	File WebContent  
-		    	{  
-		        	Ensure          = “Present”  
-		        	SourcePath      = “C:\Program Files\WindowsPowerShell\Modules\xWebAdministration\BakeryWebsite” 
-		        	DestinationPath = “C:\inetpub\FourthCoffee” 
-		        	Recurse         = $true  
-		        	Type            = “Directory”  
-		        	DependsOn       = “[WindowsFeature]AspNet45”  
-			    }   
+    	# Install the ASP .NET 4.5 role  
+    	WindowsFeature AspNet45  
+    	{  
+        	Ensure          = “Present”  
+        	Name            = “Web-Asp-Net45”  
+    	}  
+
+    	# Stop the default website  
+    	xWebsite DefaultSite 
+    	{  
+        	Ensure          = “Present”  
+			Name            = “Default Web Site”  
+        	State           = “Stopped”  
+        	PhysicalPath    = “C:\inetpub\wwwroot”  
+        	DependsOn       = “[WindowsFeature]IIS”  
+    	}  
+  
+		 # Copy the website content  
+		 File WebContent  
+		 {  
+		  	Ensure          = “Present”  
+		 	SourcePath      = “C:\Program Files\WindowsPowerShell\Modules\xWebAdministration\BakeryWebsite” 
+			DestinationPath = “C:\inetpub\FourthCoffee” 
+		  	Recurse         = $true  
+		   	Type            = “Directory”  
+			DependsOn       = “[WindowsFeature]AspNet45”  
+		}   
 			
-			    # Create a new website  
-			    xWebsite BakeryWebSite   
-			    {  
-			        Ensure          = “Present”  
-			        Name            = “FourthCoffee” 
-			        State           = “Started”  
-			        PhysicalPath    = “C:\inetpub\FourthCoffee”  
-			        DependsOn       = “[File]WebContent”  
-			    } 
-			}
+		# Create a new website  
+		xWebsite BakeryWebSite   
+		{  
+			Ensure          = “Present”  
+			Name            = “FourthCoffee” 
+			State           = “Started”  
+			PhysicalPath    = “C:\inetpub\FourthCoffee”  
+			DependsOn       = “[File]WebContent”  
+		} 
+	}
 - 将新的首页文件复制到xWebAdministration模块的目录下，DSC配置发布的时候会自动将这个目录中的首页资源一并打包的zip文件中并上传到Azure存储账号：
    ![](http://i.imgur.com/MH91ysS.png)
 
 - 发布DSC配置文件
-    	Publish-AzureRmVMDscConfiguration -ConfigurationPath C:\examples\FourthCoffee.ps1 `
- 		-ResourceGroupName zymgrp -StorageAccountName zymstore
+	
+		Publish-AzureRmVMDscConfiguration -ConfigurationPath C:\examples\FourthCoffee.ps1 `
+		-ResourceGroupName zymgrp -StorageAccountName zymstore
 - 启动DSC配置
-        Set-AzureRmVMDscExtension -ResourceGroupName zymgrp -VMName zymvm2 `
-		 -ArchiveBlobNameFourthCoffee.ps1.zip -ArchiveStorageAccountName zymstore -Version '2.19' -ConfigurationName "FourthCoffee" 
+		Set-AzureRmVMDscExtension -ResourceGroupName zymgrp -VMName zymvm2 `
+		-ArchiveBlobNameFourthCoffee.ps1.zip -ArchiveStorageAccountName zymstore -Version '2.19' `
+		-ConfigurationName "FourthCoffee" 
 
    ![](http://i.imgur.com/TyE6fcO.png)
 
